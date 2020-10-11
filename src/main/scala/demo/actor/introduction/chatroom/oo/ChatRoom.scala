@@ -8,11 +8,17 @@ import akka.actor.typed.{ActorRef, Behavior}
 
 object ChatRoom {
 
+  def apply(): Behavior[RoomCommand] =
+    Behaviors.setup(context => new ChatRoomBehavior(context))
+
   sealed trait RoomCommand
 
-  final case class GetSession(screenName: String, replyTo: ActorRef[SessionEvent]) extends RoomCommand
-
   sealed trait SessionEvent
+
+  trait SessionCommand
+
+  final case class GetSession(screenName: String, replyTo: ActorRef[SessionEvent])
+      extends RoomCommand
 
   final case class SessionGranted(handle: ActorRef[PostMessage]) extends SessionEvent
 
@@ -20,18 +26,10 @@ object ChatRoom {
 
   final case class MessagePosted(screenName: String, message: String) extends SessionEvent
 
-  trait SessionCommand
-
   final case class PostMessage(message: String) extends SessionCommand
 
-  private final case class NotifyClient(message: MessagePosted) extends SessionCommand
-
-  private final case class PublishSessionMessage(screenName: String, message: String) extends RoomCommand
-
-  def apply(): Behavior[RoomCommand] =
-    Behaviors.setup(context => new ChatRoomBehavior(context))
-
-  class ChatRoomBehavior(context: ActorContext[RoomCommand]) extends AbstractBehavior[RoomCommand](context) {
+  class ChatRoomBehavior(context: ActorContext[RoomCommand])
+      extends AbstractBehavior[RoomCommand](context) {
     private var sessions: List[ActorRef[SessionCommand]] = List.empty
 
     override def onMessage(message: RoomCommand): Behavior[RoomCommand] = {
@@ -40,7 +38,8 @@ object ChatRoom {
           // create a child actor for further interaction with the client
           val ses = context.spawn(
             SessionBehavior(context.self, screenName, client),
-            name = URLEncoder.encode(screenName, StandardCharsets.UTF_8.name))
+            name = URLEncoder.encode(screenName, StandardCharsets.UTF_8.name)
+          )
           client ! SessionGranted(ses)
           sessions = ses :: sessions
           this
@@ -52,20 +51,17 @@ object ChatRoom {
     }
   }
 
-  object SessionBehavior {
-    def apply(
-               room: ActorRef[PublishSessionMessage],
-               screenName: String,
-               client: ActorRef[SessionEvent]): Behavior[SessionCommand] =
-      Behaviors.setup(ctx => new SessionBehavior(ctx, room, screenName, client))
-  }
+  private final case class NotifyClient(message: MessagePosted) extends SessionCommand
+
+  private final case class PublishSessionMessage(screenName: String, message: String)
+      extends RoomCommand
 
   private class SessionBehavior(
-                                 context: ActorContext[SessionCommand],
-                                 room: ActorRef[PublishSessionMessage],
-                                 screenName: String,
-                                 client: ActorRef[SessionEvent])
-    extends AbstractBehavior[SessionCommand](context) {
+      context: ActorContext[SessionCommand],
+      room: ActorRef[PublishSessionMessage],
+      screenName: String,
+      client: ActorRef[SessionEvent]
+  ) extends AbstractBehavior[SessionCommand](context) {
 
     override def onMessage(msg: SessionCommand): Behavior[SessionCommand] = {
       msg match {
@@ -79,6 +75,15 @@ object ChatRoom {
           Behaviors.same
       }
     }
+  }
+
+  object SessionBehavior {
+    def apply(
+        room: ActorRef[PublishSessionMessage],
+        screenName: String,
+        client: ActorRef[SessionEvent]
+    ): Behavior[SessionCommand] =
+      Behaviors.setup(ctx => new SessionBehavior(ctx, room, screenName, client))
   }
 
 }

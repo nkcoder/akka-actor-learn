@@ -1,7 +1,7 @@
 package demo.actor.introduction.chatroom.oo
 
 import akka.actor.typed.Behavior
-import akka.actor.typed.scaladsl.{Behaviors, LoggerOps}
+import akka.actor.typed.scaladsl.Behaviors
 
 object Gabbler {
 

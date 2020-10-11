@@ -13,6 +13,23 @@ object WatchActorDemo {
   import akka.actor.typed.scaladsl.Behaviors
   import akka.actor.typed.{ActorSystem, Behavior, PostStop}
 
+  def main(args: Array[String]): Unit = {
+
+    val system: ActorSystem[Command] = ActorSystem(MasterControlProgram(), "MasterControl")
+
+    system ! SpawnJob("A")
+    system ! SpawnJob("B")
+
+    TimeUnit.MILLISECONDS.sleep(200)
+
+    // gracefully stop the system
+    system ! GracefulShutdown
+
+    Thread.sleep(100)
+
+    Await.result(system.whenTerminated, 3.seconds)
+  }
+
   sealed trait Command
 
   final case class SpawnJob(name: String) extends Command
@@ -21,11 +38,7 @@ object WatchActorDemo {
 
   final case object ShutdownJob extends Command
 
-
   object MasterControlProgram {
-
-    // Predefined cleanup operation
-    def cleanup(log: Logger): Unit = log.info("Cleaning up!")
 
     def apply(): Behavior[Command] = {
       Behaviors
@@ -59,36 +72,22 @@ object WatchActorDemo {
             Behaviors.same
         }
     }
+
+    // Predefined cleanup operation
+    def cleanup(log: Logger): Unit = log.info("Cleaning up!")
   }
 
   object Job {
 
     def apply(name: String): Behavior[Command] =
-      Behaviors.receiveMessage[Command] {
-        case ShutdownJob =>
+      Behaviors
+        .receiveMessage[Command] { case ShutdownJob =>
           Behaviors.stopped
-      }.receiveSignal {
-        case (context, PostStop) =>
+        }
+        .receiveSignal { case (context, PostStop) =>
           context.log.info("job post stop")
           Behaviors.same
-      }
-  }
-
-  def main(args: Array[String]): Unit = {
-
-    val system: ActorSystem[Command] = ActorSystem(MasterControlProgram(), "MasterControl")
-
-    system ! SpawnJob("A")
-    system ! SpawnJob("B")
-
-    TimeUnit.MILLISECONDS.sleep(200)
-
-    // gracefully stop the system
-    system ! GracefulShutdown
-
-    Thread.sleep(100)
-
-    Await.result(system.whenTerminated, 3.seconds)
+        }
   }
 
 }

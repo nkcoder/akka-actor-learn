@@ -3,18 +3,18 @@ package demo.actor.interaction
 import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.{ActorRef, ActorSystem, Behavior}
 
-/**
-  * Useful when:
+/** Useful when:
   *
-  * - Subscribing to an actor that will send many response messages back
+  *   - Subscribing to an actor that will send many response messages back
   *
   * Problems:
   *
-  * - Actors seldom have a response message from another actor as a part of their protocol (see adapted response)
-  * - It is hard to detect that a message request was not delivered or processed (see ask)
-  * - Unless the protocol already includes a way to provide context, for example a request id that is also sent in the
-  * response, it is not possible to tie an interaction to some specific context without introducing a new, separate,
-  * actor (see ask or per session child actor)
+  *   - Actors seldom have a response message from another actor as a part of their protocol (see
+  *     adapted response)
+  *   - It is hard to detect that a message request was not delivered or processed (see ask)
+  *   - Unless the protocol already includes a way to provide context, for example a request id that
+  *     is also sent in the response, it is not possible to tie an interaction to some specific
+  *     context without introducing a new, separate, actor (see ask or per session child actor)
   */
 object RequestResponseDemo {
 
