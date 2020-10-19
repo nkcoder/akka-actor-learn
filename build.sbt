@@ -11,6 +11,14 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3"
 )
 
+// scala style
+lazy val compileScalaStyle = taskKey[Unit]("compileScalaStyle")
+compileScalaStyle := scalastyle.in(Compile).toTask("").value
+(compile in Compile) := ((compile in Compile) dependsOn compileScalaStyle).value
+
+// scapegoat
+scapegoatVersion in ThisBuild := "1.3.11"
+
 
 
 
