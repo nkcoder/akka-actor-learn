@@ -16,7 +16,7 @@ object MailboxFromConfigDemo {
     val childActor = context.spawn(
       child,
       name = "child",
-      MailboxSelector.fromConfig(path = "my-app.my-special-mailbox")
+      MailboxSelector.fromConfig(path = "my-special-mailbox")
     )
 
     (1 to 20).foreach(i => childActor ! s"hi, $i")
