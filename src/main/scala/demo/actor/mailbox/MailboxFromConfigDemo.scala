@@ -3,7 +3,7 @@ package demo.actor.mailbox
 import akka.actor.typed.{ActorSystem, Behavior, MailboxSelector}
 import akka.actor.typed.scaladsl.Behaviors
 
-/** fromConfig takes an absolute config path to a block defining the dispatcher in the config file
+/** fromConfig takes an absolute config path to a block defining the demo.actor.dispatcher in the config file
   */
 object MailboxFromConfigDemo {
 

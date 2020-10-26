@@ -7,9 +7,9 @@ import akka.actor.typed.scaladsl.Behaviors
 
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
 
-/** Without any further configuration the default dispatcher runs this actor along with all other
+/** Without any further configuration the default demo.actor.dispatcher runs this actor along with all other
   * actors. This is very efficient when all actor message processing is non-blocking. When all of
-  * the available threads are blocked, however, then all the actors on the same dispatcher will
+  * the available threads are blocked, however, then all the actors on the same demo.actor.dispatcher will
   * starve for threads and will not be able to process incoming messages.
   */
 object BadFutureBlockingDemo {
@@ -30,9 +30,9 @@ object BadFutureBlockingDemo {
     * that instead, but this strategy is too simplistic: you are quite likely to find bottlenecks or
     * run out of memory or threads when the application runs under increased load.
     *
-    * Using context.executionContext as the dispatcher on which the blocking Future executes can
-    * still be a problem, since this dispatcher is by default used for all other actor processing
-    * unless you set up a separate dispatcher for the actor.
+    * Using context.executionContext as the demo.actor.dispatcher on which the blocking Future executes can
+    * still be a problem, since this demo.actor.dispatcher is by default used for all other actor processing
+    * unless you set up a separate demo.actor.dispatcher for the actor.
     */
   object BlockingActor {
     def apply(): Behavior[Int] =

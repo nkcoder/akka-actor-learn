@@ -8,7 +8,7 @@ import akka.actor.typed.scaladsl.Behaviors
 import scala.concurrent.{ExecutionContext, Future}
 
 /** An efficient method of isolating the blocking behavior, such that it does not impact the rest of
-  * the system, is to prepare and use a dedicated dispatcher for all those blocking operations. This
+  * the system, is to prepare and use a dedicated demo.actor.dispatcher for all those blocking operations. This
   * technique is often referred to as “bulk-heading” or simply “isolating blocking”.
   *
   * This is the recommended way of dealing with any kind of blocking in reactive applications. he

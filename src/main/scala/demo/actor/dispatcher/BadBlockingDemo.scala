@@ -3,9 +3,9 @@ package demo.actor.dispatcher
 import akka.actor.typed.{ActorSystem, Behavior}
 import akka.actor.typed.scaladsl.Behaviors
 
-/** Without any further configuration the default dispatcher runs this actor along with all other
+/** Without any further configuration the default demo.actor.dispatcher runs this actor along with all other
   * actors. This is very efficient when all actor message processing is non-blocking. When all of
-  * the available threads are blocked, however, then all the actors on the same dispatcher will
+  * the available threads are blocked, however, then all the actors on the same demo.actor.dispatcher will
   * starve for threads and will not be able to process incoming messages.
   */
 object BadBlockingDemo {

@@ -5,15 +5,15 @@ import akka.actor.typed.scaladsl.Behaviors
 
 /** Dispatcher
   *
-  * This is an event-based dispatcher that binds a set of Actors to a thread pool. The default
-  * dispatcher is used if no other is specified.
+  * This is an event-based demo.actor.dispatcher that binds a set of Actors to a thread pool. The default
+  * demo.actor.dispatcher is used if no other is specified.
   *
   *   - Shareability: Unlimited
   *   - Mailboxes: Any, creates one per Actor
-  *   - Use cases: Default dispatcher, Bulkheading
+  *   - Use cases: Default demo.actor.dispatcher, Bulkheading
   *   - Driven by: java.util.concurrent.ExecutorService. Specify using “executor” using
   *     “fork-join-executor”, “thread-pool-executor” or the fully-qualified class name of an
-  *     akka.dispatcher.ExecutorServiceConfigurator implementation.
+  *     akka.demo.actor.dispatcher.ExecutorServiceConfigurator implementation.
   */
 object DispatcherFromConfigDemo {
 
@@ -24,7 +24,7 @@ object DispatcherFromConfigDemo {
 
   def guardian: Behavior[String] = Behaviors.setup { context =>
     context.log.info("guardian starting.")
-    // load dispatcher from config
+    // load demo.actor.dispatcher from config
     val childActor = context.spawn(
       child,
       name = "child",

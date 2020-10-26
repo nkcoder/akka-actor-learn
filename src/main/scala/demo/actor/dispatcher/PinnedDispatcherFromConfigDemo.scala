@@ -5,7 +5,7 @@ import akka.actor.typed.scaladsl.Behaviors
 
 /** PinnedDispatcher
   *
-  * This dispatcher dedicates a unique thread for each actor using it; i.e. each actor will have its
+  * This demo.actor.dispatcher dedicates a unique thread for each actor using it; i.e. each actor will have its
   * own thread pool with only one thread in the pool.
   *
   *   - Shareability: None
@@ -23,7 +23,7 @@ object PinnedDispatcherFromConfigDemo {
 
   def guardian: Behavior[String] = Behaviors.setup { context =>
     context.log.info("guardian starting.")
-    // load dispatcher from config
+    // load demo.actor.dispatcher from config
     val childActor = context.spawn(
       child,
       name = "child",

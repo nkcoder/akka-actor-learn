@@ -23,7 +23,7 @@ object PoolRouterDemo {
     val poolSize: Int = 3
 
     context => {
-      // Since the router itself is spawned as an actor the dispatcher used for it can be configured
+      // Since the router itself is spawned as an actor the demo.actor.dispatcher used for it can be configured
       // directly in the call to spawn. The routees, however, are spawned by the router. Therefore,
       // the PoolRouter has a property to configure the Props of its routees
       val pool = Routers
